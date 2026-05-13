@@ -5,12 +5,16 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+from pathlib import Path
+from app.config import Config
 
-from dotenv import load_dotenv
+from app.auth.model import User
+from app.person.model import Person
+from app.wish.model import Wish
+from app.gift.model import Gift
 
-load_dotenv()
 
-database_url = os.getenv("DATABASE_URL")
+database_url = Config.DATABASE_URL
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -29,7 +33,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from backend.app.db import Base
+from app.db import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
