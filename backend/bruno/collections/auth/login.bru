@@ -1,0 +1,28 @@
+meta {
+  name: login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{host}}:{{port}}/{{prefix}}{{version}}/auth/login
+  body: formUrlEncoded
+  auth: inherit
+}
+
+body:json {
+  {
+    "username": "wendy.companie@gmail",
+    "password": "test12345678",
+  }
+}
+
+body:form-urlencoded {
+  username: wendy.companie@gmail.com
+  password: test12345678
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

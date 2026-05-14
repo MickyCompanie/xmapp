@@ -1,0 +1,20 @@
+meta {
+  name: me
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}:{{port}}/{{prefix}}{{version}}/user/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3ZW5keS5jb21wYW5pZUBnbWFpbC5jb20iLCJleHAiOjE3Nzg3OTQxODl9.75Iu5N9tIAUdG5hMQW8tu9BeuQGHDEawQDIrM3GOu2g
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
