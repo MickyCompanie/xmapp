@@ -8,7 +8,7 @@ from alembic import context
 from pathlib import Path
 from app.config import Config
 
-from app.auth.model import User
+from app.user.model import User
 from app.person.model import Person
 from app.wish.model import Wish
 from app.gift.model import Gift
