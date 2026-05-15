@@ -1,0 +1,26 @@
+meta {
+  name: reactivate user
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{host}}:{{port}}/{{prefix}}{{version}}/user/reactivate/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3ZW5keS5jb21wYW5pZUBnbWFpbC5jb20iLCJleHAiOjE3Nzg4NDIwMzR9.Tqmjsa5k5fYblDC81Xys6cIElMhTi8_kLeNhQZuXMtw
+}
+
+body:json {
+  {
+    "id": 2 
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
