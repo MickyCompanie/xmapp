@@ -6,6 +6,7 @@ env_path = current_dir.parent.parent / ".env"
 
 class Settings(BaseSettings):
     DATABASE_URL: str
+    TEST_DATABASE_URL: str
     VERSION: str
     PREFIX: str
     JWT_SECRET_KEY: str
