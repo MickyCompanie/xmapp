@@ -21,19 +21,19 @@ class GiftStatus(Enum):
 class Gift(Base):
     __tablename__ = 'gifts'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
 
     title: Mapped[str] = mapped_column(String(100), nullable=False)
-    price_paid: Mapped[Optional[float]] = mapped_column()
-    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now(), init=False)
+    updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now(), init=False)
     
     giver_id: Mapped[int] = mapped_column(ForeignKey("people.id"), nullable=False)
     receiver_id: Mapped[int] = mapped_column(ForeignKey("people.id"), nullable=False)
-    wish_id: Mapped[Optional[int]] = mapped_column(ForeignKey("wishes.id"), nullable=True)
 
    
-    giver: Mapped["Person"] = relationship("Person", foreign_keys=[giver_id], back_populates="gifts_given")
-    receiver: Mapped["Person"] = relationship("Person", foreign_keys=[receiver_id], back_populates="gifts_received")
-    wish: Mapped[Optional["Wish"]] = relationship("Wish")
+    giver: Mapped["Person"] = relationship("Person", foreign_keys=[giver_id], back_populates="gifts_given", init=False)
+    receiver: Mapped["Person"] = relationship("Person", foreign_keys=[receiver_id], back_populates="gifts_received", init=False)
+    wish: Mapped[Optional["Wish"]] = relationship("Wish", init=False)
+    wish_id: Mapped[Optional[int]] = mapped_column(ForeignKey("wishes.id"), nullable=True, default=None)
+    price_paid: Mapped[Optional[float]] = mapped_column(default=None)
     status: Mapped[GiftStatus] = mapped_column(EnumSQL(GiftStatus, name='gift_status'), default=GiftStatus.PENDING)
