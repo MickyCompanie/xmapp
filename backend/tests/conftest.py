@@ -10,6 +10,7 @@ from app.auth.utils import create_access_token
 
 from app.wish.model import Wish
 from app.person.model import Person
+from app.gift.model import Gift
 
 engine = create_engine(
     Config.TEST_DATABASE_URL,
@@ -49,7 +50,6 @@ def client(db_session):
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as c:
         yield c
-    # On nettoie l'override après le test
     app.dependency_overrides.clear()
 
 @pytest.fixture
@@ -106,3 +106,16 @@ def test_person_without_account(db_session):
     db_session.commit()
     db_session.refresh(person)
     return person
+
+@pytest.fixture
+def test_gift(db_session, test_user, test_person_without_account):
+    gift = Gift(
+        title="PlayStation 5",
+        price_paid=499.99,
+        giver_id=test_user.person.id,
+        receiver_id=test_person_without_account.id
+    )
+    db_session.add(gift)
+    db_session.commit()
+    db_session.refresh(gift)
+    return gift
