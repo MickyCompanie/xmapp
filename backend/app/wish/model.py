@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional
 from app.db import Base
 from enum import Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Enum as EnumSQL, func, ForeignKey, String, Text
+from sqlalchemy import Enum as EnumSQL, func, ForeignKey, String, Text, Float
 from datetime import datetime
 
 if TYPE_CHECKING:
@@ -12,14 +12,15 @@ if TYPE_CHECKING:
 class Wish(Base):
     __tablename__ = 'wishes'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
-    description: Mapped[Optional[str]] = mapped_column(Text)
-    url: Mapped[Optional[str]] = mapped_column(String(500))
-    price_estimate: Mapped[Optional[float]] = mapped_column()
-    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now(), init=False)
+    updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now(), init=False)
     
     
-    person_id: Mapped[int] = mapped_column(ForeignKey("people.id"), nullable=False)
-    owner: Mapped["Person"] = relationship(back_populates="wishes")
+    person_id: Mapped[int] = mapped_column(ForeignKey("people.id"))
+    owner: Mapped["Person"] = relationship(back_populates="wishes", init=False)
+    
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True, default=None)
+    url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True, default=None)
+    price_estimate: Mapped[Optional[float]] = mapped_column(Float, nullable=True, default=None)

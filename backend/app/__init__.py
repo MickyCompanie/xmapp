@@ -9,6 +9,8 @@ from app.gift.model import Gift
 
 from app.auth.router import auth_router
 from app.user.router import user_router
+from app.wish.router import wish_router
+
 
 app = FastAPI(
     title='xmapp api',
@@ -21,6 +23,7 @@ url = f'/{Config.PREFIX}{Config.VERSION}'
 
 app.include_router(auth_router, prefix=f"{url}/auth", tags=["auth"])
 app.include_router(user_router, prefix=f"{url}/user", tags=["user"])
+app.include_router(wish_router, prefix=f"{url}/wish", tags=["wish"])
 
 app.add_middleware(
     CORSMiddleware,
