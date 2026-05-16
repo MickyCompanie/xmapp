@@ -8,6 +8,8 @@ from app.db import Base, get_db
 from app.config import Config
 from app.auth.utils import create_access_token
 
+from app.wish.model import Wish
+
 engine = create_engine(
     Config.TEST_DATABASE_URL,
     connect_args={"options": "-c client_encoding=utf8"} # <--- force l'utf8 pour return français de postgres
@@ -79,3 +81,18 @@ def auth_client(client, test_user):
         "Authorization": f"Bearer {access_token}"
     }
     return client
+
+@pytest.fixture
+def test_wish(db_session, test_user):
+    """Crée un souhait lié à notre utilisateur de test"""
+    wish = Wish(
+        title="Console de jeux",
+        description="Version Standard avec deux manettes",
+        url="https://example.com/console",
+        price_estimate=499.99,
+        person_id=test_user.person_id 
+    )
+    db_session.add(wish)
+    db_session.commit()
+    db_session.refresh(wish)
+    return wish
