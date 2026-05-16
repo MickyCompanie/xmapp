@@ -6,14 +6,17 @@ from datetime import datetime
 class PersonBase(BaseModel):
     first_name: str = Field(..., min_length=1, max_length=50, examples=["Jean"])
     last_name: str = Field(..., min_length=1, max_length=50, examples=["Dupont"])
-    birth_date: datetime
+    birth_date: datetime | None = None
 
 
 class PersonCreate(PersonBase):
-    managed_by_id: Optional[int] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    birth_date: Optional[datetime] = None
 
 
 class PersonUpdate(BaseModel):
+    id: int
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     birth_date: Optional[datetime] = None
