@@ -9,6 +9,7 @@ from app.config import Config
 from app.auth.utils import create_access_token
 
 from app.wish.model import Wish
+from app.person.model import Person
 
 engine = create_engine(
     Config.TEST_DATABASE_URL,
@@ -74,7 +75,6 @@ def test_user(db_session):
 
 @pytest.fixture
 def auth_client(client, test_user):
-    """Renvoie un TestClient avec le header Authorization déjà rempli."""
     access_token = create_access_token(data={"sub": test_user.email})
     client.headers = {
         **client.headers,
@@ -84,7 +84,6 @@ def auth_client(client, test_user):
 
 @pytest.fixture
 def test_wish(db_session, test_user):
-    """Crée un souhait lié à notre utilisateur de test"""
     wish = Wish(
         title="Console de jeux",
         description="Version Standard avec deux manettes",
@@ -96,3 +95,14 @@ def test_wish(db_session, test_user):
     db_session.commit()
     db_session.refresh(wish)
     return wish
+
+@pytest.fixture
+def test_person_without_account(db_session):
+    person = Person(
+        first_name="Jean",
+        last_name="Dupont"
+    )
+    db_session.add(person)
+    db_session.commit()
+    db_session.refresh(person)
+    return person
