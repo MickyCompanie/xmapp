@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 class UserRole(Enum):
     USER = 'user'
     ADMIN = 'admin'
+    SANTA = 'santa'
 
 
 class User(Base):

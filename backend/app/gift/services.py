@@ -2,10 +2,12 @@ from sqlalchemy.orm import Session
 from app.gift.model import Gift
 from app.gift.schemas import GiftCreate, GiftUpdate, GiftRead
 from fastapi import HTTPException
+from app.user.model import User, UserRole
 
-
-def get_all_gifts(db: Session) -> list[GiftRead]:
-    return db.query(Gift).all()
+def get_all_gifts(db: Session, user: User) -> list[GiftRead]:
+    if user.role == UserRole.SANTA:
+        return db.query(Gift).all()
+    return db.query(Gift).filter(Gift.giver_id == user.person_id)
 
 def get_gift_by_id(db: Session, gift_id: str) -> GiftRead:
     gift = db.query(Gift).filter(Gift.id == gift_id).first()

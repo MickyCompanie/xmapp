@@ -20,6 +20,9 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="this user is deactivated.")
+
     access_token_expires = timedelta(minutes=Config.ACCESS_TOKEN_EXPIRY)
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires

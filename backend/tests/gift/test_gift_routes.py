@@ -11,16 +11,41 @@ VALID_GIFT_PAYLOAD = {
     
 # GET
 
-#TODO only santa
-def test_auth_user_can_get_all_gifts(auth_client, test_gift):
-    response = auth_client.get(f"/{Config.PREFIX}{Config.VERSION}/gift/")
+def test_santa_user_can_get_all_gifts(santa_client, test_gift):
+    """Un utilisateur SANTA doit pouvoir récupérer la liste complète des cadeaux."""
+    response = santa_client.get(f"/{Config.PREFIX}{Config.VERSION}/gift/")
     
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
-    assert len(data) >= 1
-    
     assert any(g["id"] == test_gift.id for g in data)
+
+def test_regular_auth_user_only_sees_their_owned_gifts(auth_client, test_gift, db_session):
+    """Un utilisateur classique ne doit voir que les cadeaux qu'il offre."""
+    from app.gift.model import Gift
+    from app.person.model import Person
+
+    person_giver = Person(first_name="Intrus", last_name="Giver")
+    person_receiver = Person(first_name="Intrus", last_name="Receiver")
+    db_session.add_all([person_giver, person_receiver])
+    db_session.flush() 
+
+
+    intrus_gift = Gift(
+        title="Cadeau Secret", 
+        giver_id=person_giver.id, 
+        receiver_id=person_receiver.id
+    )
+    db_session.add(intrus_gift)
+    db_session.commit()
+
+    
+    response = auth_client.get(f"/{Config.PREFIX}{Config.VERSION}/gift/")
+    assert response.status_code == 200
+    data = response.json()
+
+    assert any(g["id"] == test_gift.id for g in data)
+    assert not any(g["id"] == intrus_gift.id for g in data)
 
 def test_non_auth_user_cannot_get_all_gifts(client):
     response = client.get(f"/{Config.PREFIX}{Config.VERSION}/gift/")

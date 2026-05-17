@@ -4,14 +4,15 @@ from app.db import get_db
 from app.gift.model import Gift
 from app.gift.schemas import GiftRead, GiftCreate, GiftUpdate
 from app.gift import services as gift_service
-from app.user.model import User
+from app.user.model import User, UserRole
 from app.auth.depedencies import must_be_authenticated, get_current_user
 
 gift_router = APIRouter()
 
-@gift_router.get('/', dependencies=[Depends(must_be_authenticated)], response_model=list[GiftRead], status_code=status.HTTP_200_OK)
-def get_all_gifts(db: Session = Depends(get_db)):
-    return gift_service.get_all_gifts(db)
+@gift_router.get('/', response_model=list[GiftRead], status_code=status.HTTP_200_OK)
+def get_all_gifts(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return gift_service.get_all_gifts(db, user)
+
 
 @gift_router.get('/{gift_id}', dependencies=[Depends(must_be_authenticated)], response_model=GiftRead, status_code=status.HTTP_200_OK)
 def get_gift_by_id(gift_id: int, db: Session = Depends(get_db)):
