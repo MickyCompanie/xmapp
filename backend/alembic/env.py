@@ -12,6 +12,8 @@ from app.user.model import User
 from app.person.model import Person
 from app.wish.model import Wish
 from app.gift.model import Gift
+from app.expense.model import Expense
+from app.repayment.model import Repayment
 
 
 database_url = Config.DATABASE_URL
