@@ -109,18 +109,33 @@ def santa_client(client, test_santa_user):
     return client
 
 @pytest.fixture
-def test_wish(db_session, test_user):
-    wish = Wish(
+def wish_factory(db_session):
+    """Factory pour créer des souhaits (Wish) à la volée dans les tests."""
+    from app.wish.model import Wish
+
+    def _create_wish(person_id: int, title: str = "Cadeau Surprise", description: str = "Une description"):
+        wish = Wish(
+            title=title,
+            description=description,
+            url="https://example.com/item",
+            price_estimate=29.99,
+            person_id=person_id
+        )
+        db_session.add(wish)
+        db_session.commit()
+        db_session.refresh(wish)
+        return wish
+
+    return _create_wish
+
+
+@pytest.fixture
+def test_wish(wish_factory, test_user):
+    return wish_factory(
+        person_id=test_user.person_id,
         title="Console de jeux",
-        description="Version Standard avec deux manettes",
-        url="https://example.com/console",
-        price_estimate=499.99,
-        person_id=test_user.person_id 
+        description="Version Standard avec deux manettes"
     )
-    db_session.add(wish)
-    db_session.commit()
-    db_session.refresh(wish)
-    return wish
 
 @pytest.fixture
 def test_person_without_account(db_session):
