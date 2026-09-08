@@ -33,11 +33,12 @@ class Expense(Base):
 
     payer_id: Mapped[int] = mapped_column(ForeignKey("people.id"), nullable=False)
     
-    payer: Mapped["Person"] = relationship("Person", foreign_keys=[payer_id])
+    payer: Mapped["Person"] = relationship("Person", foreign_keys=[payer_id], init=False)
     repayments: Mapped[List["Repayment"]] = relationship(
         "Repayment", 
         back_populates="expense", 
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
+        init=False
     )
     expense_type: Mapped[ExpenseType] = mapped_column(EnumSQL(ExpenseType, name='expense_type'), default=ExpenseType.OTHER)
     status: Mapped[ExpenseStatus] = mapped_column(EnumSQL(ExpenseStatus, name='expense_status'), default=ExpenseStatus.FULLY_REPAID)
