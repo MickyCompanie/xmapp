@@ -1,6 +1,6 @@
 FROM python:3.13-slim
 
-WORKDIR /app
+WORKDIR /code
 
 # Installation des dépendances système nécessaires pour psycopg2 / PostgreSQL
 RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8000
 
 # Commande par défaut pour lancer l'API FastAPI
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
