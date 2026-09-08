@@ -12,6 +12,8 @@ from app.user.router import user_router
 from app.wish.router import wish_router
 from app.person.router import person_router
 from app.gift.router import gift_router
+from app.expense.router import expense_router
+from app.repayment.router import repayment_router
 
 
 app = FastAPI(
@@ -21,13 +23,15 @@ app = FastAPI(
 )
 
 url = f'/{Config.PREFIX}{Config.VERSION}'
-
+print(url)
 
 app.include_router(auth_router, prefix=f"{url}/auth", tags=["auth"])
 app.include_router(user_router, prefix=f"{url}/user", tags=["user"])
 app.include_router(wish_router, prefix=f"{url}/wish", tags=["wish"])
 app.include_router(person_router, prefix=f"{url}/person", tags=["person"])
 app.include_router(gift_router, prefix=f"{url}/gift", tags=["gift"])
+app.include_router(expense_router, prefix=f"{url}/expense", tags=["expense"])
+app.include_router(repayment_router, prefix=f"{url}/repayment", tags=["repayment"])
 
 app.add_middleware(
     CORSMiddleware,

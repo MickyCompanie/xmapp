@@ -38,6 +38,9 @@ def must_be_authenticated(token: str = Depends(oauth2_scheme)):
     return True
 
 def authorized_role(*allowed_roles: UserRole | str):
+    '''
+    
+    '''
     roles_as_strings = {
         r.value if isinstance(r, UserRole) else str(r) 
         for r in allowed_roles

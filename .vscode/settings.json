@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
+        "autoflush",
         "avec",
         "depedencies",
-        "modifie"
+        "modifie",
+        "sessionmaker",
+        "xmapp"
     ]
 }
