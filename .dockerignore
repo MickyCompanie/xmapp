@@ -1,6 +1,37 @@
+# Environnements virtuels & Python
 venv/
 .venv/
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
 .pytest_cache/
+.coverage
+
+# Frontend & Dépendances JS (Impératif)
+**/node_modules/
+**/build/
+**/dist/
+**/.next/
+**/.nuxt/
+.npm/
+
+# Git & Fichiers d'environnement
 .git/
+.gitignore
 .env
+.env.*
+
+# Éditeurs & Système
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs & Fichiers temporaires
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+tmp/    
