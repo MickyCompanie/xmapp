@@ -48,4 +48,4 @@ app.add_middleware(
 
 @app.get('/')
 def read_root():
-    return {"message": "Welcome to the xmapp api!"}
+    return {"message": "Welcome to my xmapp api! 🎄"}

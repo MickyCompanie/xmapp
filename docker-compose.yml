@@ -32,7 +32,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./backend:/code
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgrespassword}@db:5432/xmapp_dev
       - TEST_DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgrespassword}@db_test:5432/xmapp_test
@@ -42,6 +42,8 @@ services:
 
   frontend:  # <-- Doit être aligné avec backend, db et db_test
     build: ./frontend
+    env_file:
+      - .env
     container_name: xmapp_frontend
     ports:
       - "3000:3000"
