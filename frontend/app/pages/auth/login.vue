@@ -1,7 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4">
-    <div class="card w-full max-w-md bg-base-200 border border-base-300 shadow-xl">
-      <div class="card-body">
+  <div>
         <!-- Logo & En-tête -->
         <div class="text-center space-y-2 mb-4">
           <div class="w-12 h-12 rounded-full bg-primary mx-auto flex items-center justify-center text-2xl shadow">
@@ -61,12 +59,16 @@
             Créer un compte
           </NuxtLink>
         </div>
-      </div>
-    </div>
+
   </div>
 </template>
 
 <script setup>
+
+definePageMeta({
+  layout: 'auth'
+})
+
 const email = ref('')
 const password = ref('')
 const isLoading = ref(false)
