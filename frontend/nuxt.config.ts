@@ -2,7 +2,9 @@
 export default defineNuxtConfig({
   app: {
     head: {
+      title: 'xmapp',
       htmlAttrs: {
+        'lang': 'fr',
         'data-theme': 'christmas' 
       }
     }
