@@ -44,7 +44,39 @@
     </div>
 
     <!-- Footer Sidebar -->
+
+    <!-- CARTE PROFIL CLIQUABLE -->
+      
     <div class="p-3 bg-base-300/50 rounded-box text-xs text-center mt-6 md:mt-0 space-y-1">
+      <NuxtLink 
+        to="/profile" 
+        @click="emit('close')"
+        class="my-2 flex items-center gap-3 p-2.5 rounded-xl bg-base-100 hover:bg-base-300/70 border border-base-300/60 shadow-sm transition-all cursor-pointer select-none group"
+      >
+        <!-- Avatar (Initiales ou Image) -->
+        <div class="avatar placeholder">
+          <div class="bg-primary text-primary-content rounded-full w-10 ring ring-primary ring-offset-base-100 ring-offset-1">
+            <!-- Si vous avez une image de profil : <img src="/user.jpg" alt="Profil" /> -->
+            <span class="text-sm font-bold">JD</span>
+          </div>
+        </div>
+
+        <!-- Nom & Lien -->
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold truncate group-hover:text-primary transition-colors">
+            John Doe
+          </p>
+          <p class="text-[11px] text-neutral/60 truncate">
+            Mon profil
+          </p>
+        </div>
+
+        <!-- Chevron d'indication -->
+        <span class="text-neutral/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-xs pr-1">
+          ❯
+        </span>
+      </NuxtLink>
+      
       <div class="flex items-center justify-between">
         <span>Statut API :</span>
         <span v-if="loading" class="badge badge-warning badge-sm">Connexion...</span>
