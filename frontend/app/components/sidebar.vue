@@ -12,8 +12,12 @@
         class="flex items-center justify-between px-2 cursor-pointer select-none" 
       >
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold shadow">
-              🎄
+            <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-white text-xl font-bold shadow">
+              <img 
+                src="/logo-192.png" 
+                alt="Logo xmapp" 
+                class="w-6 h-6 object-contain drop-shadow-sm" 
+              />
             </div>
             <div>
               <h1 class="font-bold text-lg text-primary leading-tight">xmapp</h1>

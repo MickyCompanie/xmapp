@@ -2,8 +2,12 @@
   <div class="md:hidden bg-base-200 border-b border-base-300 p-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
     
     <NuxtLink to="/" class="flex items-center gap-2 cursor-pointer select-none">
-        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-base font-bold shadow">
-          🎄
+        <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white text-base font-bold shadow">
+          <img 
+                src="/logo-192.png" 
+                alt="Logo xmapp" 
+                class="w-6 h-6 object-contain drop-shadow-sm" 
+              />
         </div>
         <span class="font-bold text-base text-primary">xmapp</span>
     </NuxtLink>

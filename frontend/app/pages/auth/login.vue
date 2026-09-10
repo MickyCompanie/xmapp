@@ -2,8 +2,12 @@
   <div>
         <!-- Logo & En-tête -->
         <div class="text-center space-y-2 mb-4">
-          <div class="w-12 h-12 rounded-full bg-primary mx-auto flex items-center justify-center text-2xl shadow">
-            🎄
+          <div class="w-12 h-12 rounded-full bg-secondary mx-auto flex items-center justify-center text-2xl shadow">
+            <img 
+                src="/logo-192.png" 
+                alt="Logo xmapp" 
+                class="w-8 h-8 object-contain drop-shadow-sm" 
+              />
           </div>
           <h1 class="text-2xl font-black text-primary">Connexion</h1>
           <p class="text-xs text-neutral/70">Accédez à votre espace de gestion des fêtes</p>
@@ -55,7 +59,7 @@
         <!-- Lien Inscription -->
         <div class="text-center text-sm">
           <span class="text-neutral/70">Vous n'avez pas de compte ? </span>
-          <NuxtLink to="/signup" class="text-secondary font-bold hover:underline">
+          <NuxtLink to="/auth/signup" class="text-secondary font-bold hover:underline">
             Créer un compte
           </NuxtLink>
         </div>
