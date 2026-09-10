@@ -1,5 +1,7 @@
 <template>
-    <h1>gifts</h1>
+    <PageTitle title="gifts" >
+        <p>placeholder</p>
+    </PageTitle>
 </template>
 
 <script setup>

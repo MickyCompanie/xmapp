@@ -1,15 +1,8 @@
 <template>
-  <div>
+  <div class="grid grid-cols-1 gap-y-5">
       <!-- HEADER / TOPBAR -->
-      <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-base-200 p-4 sm:p-5 rounded-box shadow-sm border border-base-300">
-        <div>
-          <h2 class="text-xl sm:text-2xl font-extrabold text-primary">Aperçu Général</h2>
-          <p class="text-xs sm:text-sm text-neutral/70">Bienvenue sur votre interface de suivi des remboursements festifs.</p>
-        </div>
-        
-        <!-- Actions & Profil -->
-        <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-          <div class="flex items-center gap-2">
+      <PageTitle title="Aperçu Général" description="Bienvenue sur votre interface de suivi des remboursements festifs." >
+        <div class="flex items-center gap-2">
             <button class="btn btn-primary btn-xs sm:btn-sm">
               ➕ <span class="hidden xs:inline">Nouvelle</span> Demande
             </button>
@@ -22,8 +15,7 @@
               <span class="text-xs">PN</span>
             </div>
           </div>
-        </div>
-      </header>
+      </PageTitle>
 
       <!-- CARTES DES STATISTIQUES -->
       <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

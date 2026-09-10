@@ -1,5 +1,7 @@
 <template>
-    <h1>expenses</h1>
+    <PageTitle title="expenses" >
+        <p>placeholder</p>
+    </PageTitle>
 </template>
 
 <script setup>

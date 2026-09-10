@@ -1,6 +1,9 @@
 <template>
-    <h1>wishes</h1>
+    <PageTitle title="wishes" >
+        <p>placeholder</p>
+    </PageTitle>
 </template>
 
 <script setup>
+
 </script>
