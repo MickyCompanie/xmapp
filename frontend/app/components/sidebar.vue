@@ -7,7 +7,10 @@
   >
     <div class="space-y-6">
       <!-- Logo & Titre -->
-      <NuxtLink to="/" class="flex items-center justify-between px-2 cursor-pointer select-none" >
+      <NuxtLink 
+        to="/" 
+        class="flex items-center justify-between px-2 cursor-pointer select-none" 
+      >
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold shadow">
               🎄
@@ -26,7 +29,8 @@
           <NuxtLink
             :to="item.to"
             @click="emit('close')"
-            active-class="active bg-primary text-primary-content font-semibold"
+            class="active:!bg-accent active:!text-primary-content"
+            active-class="active !bg-primary !text-secondary-content font-semibold"
           >
             <span>{{ item.icon }} </span>
             <span class="ml-1">{{ item.label }}</span>
