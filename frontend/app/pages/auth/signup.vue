@@ -119,20 +119,13 @@ async function handleSignup() {
   try {
     errorMessage.value = null
     isLoading.value = true
-    await authApi.signup(form)
-    
-    // 2. Connexion automatique
-    const loginResponse = await authApi.login({
-      username: form.email,
-      password: form.password
+
+    await authApi.signup(form.value)
+
+    await authApi.login({
+      email: form.value.email,
+      password: form.value.password
     })
-
-    // 3. Sauvegarde des tokens et redirection
-    const accessToken = useCookie('access_token', { maxAge: 60 * 60 * 24 * 7 })
-    const refreshToken = useCookie('refresh_token', { maxAge: 60 * 60 * 24 * 30 })
-
-    accessToken.value = loginResponse.access_token
-    refreshToken.value = loginResponse.refresh_token
 
     return navigateTo('/')
   } catch (err) {

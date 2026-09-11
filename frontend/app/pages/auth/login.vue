@@ -90,17 +90,14 @@ async function handleLogin() {
   isLoading.value = true
 
   try {
-    await authApi.login(form)
-    
-    // 2. Connexion automatique
-    const loginResponse = await authApi.login({
-      username: form.username,
-      password: form.password
+    await authApi.login({
+      username: form.value.username,
+      password: form.value.password
     })
 
     return navigateTo('/')
   } catch (err) {
-    errorMessage.value = formatApiError(errors) || 'Une erreur est survenue lors de l\'identification.'
+    errorMessage.value = formatApiError(err) || 'Une erreur est survenue lors de l\'identification.'
   } finally {
     isLoading.value = false
   }

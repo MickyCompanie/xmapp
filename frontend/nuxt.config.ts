@@ -31,6 +31,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: `${host}/${prefix}/${version}`,
+      accessTokenExpiryMin: Number(process.env.ACCESS_TOKEN_EXPIRY || 60),
+      refreshTokenExpiryDays: Number(process.env.REFRESH_TOKEN_EXPIRY || 7)
     }
   }
 })
