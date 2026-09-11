@@ -91,8 +91,8 @@ async function handleLogin() {
 
   try {
     await authApi.login({
-      username: form.value.username,
-      password: form.value.password
+      username: form.username,
+      password: form.password
     })
 
     return navigateTo('/')

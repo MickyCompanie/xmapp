@@ -120,11 +120,11 @@ async function handleSignup() {
     errorMessage.value = null
     isLoading.value = true
 
-    await authApi.signup(form.value)
+    await authApi.signup(form)
 
     await authApi.login({
-      email: form.value.email,
-      password: form.value.password
+      email: form.email,
+      password: form.password
     })
 
     return navigateTo('/')

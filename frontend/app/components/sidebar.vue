@@ -48,16 +48,18 @@
     <!-- CARTE PROFIL CLIQUABLE -->
       
     <div class="p-3 bg-base-300/50 rounded-box text-xs text-center mt-6 md:mt-0 space-y-1">
+      <div class="my-2 flex items-center justify-between gap-1 p-2 rounded-xl bg-base-100 border border-base-300/60 shadow-sm">
+  
+
       <NuxtLink 
         to="/profile" 
         @click="emit('close')"
-        class="my-2 flex items-center gap-3 p-2.5 rounded-xl bg-base-100 hover:bg-base-300/70 border border-base-300/60 shadow-sm transition-all cursor-pointer select-none group"
+        class="flex items-center gap-3 flex-1 min-w-0 p-1 rounded-lg hover:bg-base-200/60 transition-all cursor-pointer select-none group"
       >
         <!-- Avatar (Initiales ou Image) -->
         <div class="avatar placeholder">
-          <div class="bg-primary text-primary-content rounded-full w-10 ring ring-primary ring-offset-base-100 ring-offset-1">
-            <!-- Si vous avez une image de profil : <img src="/user.jpg" alt="Profil" /> -->
-            <span class="text-sm font-bold">JD</span>
+          <div class="bg-primary text-primary-content rounded-full w-9 ring ring-primary ring-offset-base-100 ring-offset-1">
+            <span class="text-xs font-bold">JD</span>
           </div>
         </div>
 
@@ -70,12 +72,22 @@
             Mon profil
           </p>
         </div>
-
-        <!-- Chevron d'indication -->
-        <span class="text-neutral/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-xs pr-1">
-          ❯
-        </span>
       </NuxtLink>
+
+      <!-- Bouton de déconnexion -->
+      <button 
+        type="button" 
+        @click="handleLogout"
+        title="Déconnexion"
+        class="p-2 rounded-lg text-neutral/50 hover:text-error hover:bg-error/10 transition-colors flex items-center justify-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+      </button>
+    </div>
       
       <div class="flex items-center justify-between">
         <span>Statut API :</span>
@@ -93,6 +105,8 @@
 </template>
 
 <script setup>
+import authApi from '~/src/services/auth'
+
 const props = defineProps({
   isMobileMenuOpen: {
     type: Boolean,
@@ -114,4 +128,10 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
+
+const handleLogout = () => {
+  emit('close')
+  authApi.clearTokens()
+  navigateTo('/auth/login')
+}
 </script>
