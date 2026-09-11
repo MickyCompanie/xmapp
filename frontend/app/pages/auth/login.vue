@@ -71,6 +71,7 @@
 
 <script setup>
 import { authApi } from '~/src/services/auth' 
+import { formatApiError } from '~/utils/error'
 
 definePageMeta({
   layout: 'auth'
@@ -99,13 +100,7 @@ async function handleLogin() {
 
     return navigateTo('/')
   } catch (err) {
-    console.log(err.data?.detail)
-    let errors = {}
-    err.data?.detail?.forEach(element => {
-      errors[element.loc[1]] = element.msg
-    });
-    console.log(errors)
-    errorMessage.value = errors || 'Une erreur est survenue lors de l\'identification.'
+    errorMessage.value = formatApiError(errors) || 'Une erreur est survenue lors de l\'identification.'
   } finally {
     isLoading.value = false
   }

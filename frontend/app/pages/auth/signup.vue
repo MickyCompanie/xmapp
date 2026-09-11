@@ -14,8 +14,10 @@
     </div>
 
     <!-- Alerte d'erreur -->
-    <div v-if="errorMessage != []" class="alert alert-error text-xs py-2 mb-2">
-      <span>{{ errorMessage }}</span>
+    <div v-if="errorMessage" class="alert alert-error text-xs py-2 mb-2">
+      <ul>
+        <li v-for="val, key in errorMessage">{{ key }}: {{ val }}</li>
+      </ul>
     </div>
 
     <!-- Formulaire -->
@@ -94,6 +96,7 @@
 
 <script setup>
 import { authApi } from '~/src/services/auth' 
+import { formatApiError } from '~/utils/error'
 
 definePageMeta({
   layout: 'auth'
@@ -107,13 +110,15 @@ const form = reactive({
 })
 
 const isLoading = ref(false)
-const errorMessage = ref([])
+const errorMessage = ref(null)
 
 async function handleSignup() {
-  errorMessage.value = []
+  errorMessage.value = null
   isLoading.value = true
 
   try {
+    errorMessage.value = null
+    isLoading.value = true
     await authApi.signup(form)
     
     // 2. Connexion automatique
@@ -131,7 +136,7 @@ async function handleSignup() {
 
     return navigateTo('/')
   } catch (err) {
-    errorMessage.value = err.data?.detail.reduce((acc, curr) => { return curr.msg}, []) || 'Une erreur est survenue lors de l\'inscription.'
+    errorMessage.value = formatApiError(err) || 'Une erreur est survenue lors de l\'identification.'
   } finally {
     isLoading.value = false
   }
