@@ -52,7 +52,7 @@ services:
       - /app/node_modules
       - /app/.nuxt
     environment:
-      - NUXT_PUBLIC_API_BASE=http://localhost:8000
+      - NUXT_PUBLIC_API_BASE=http://localhost:8000/api/v0.1.0
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
     depends_on:

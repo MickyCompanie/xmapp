@@ -5,7 +5,6 @@ export const apiFetch = (endpoint, options = {}) => {
     baseURL: config.public.apiBase,
     ...options,
     headers: {
-      'Content-Type': 'application/json',
       ...options?.headers,
     },
   })

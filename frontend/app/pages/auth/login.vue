@@ -15,7 +15,9 @@
 
         <!-- Alerte d'erreur -->
         <div v-if="errorMessage" class="alert alert-error text-xs py-2 mb-2">
-          <span>{{ errorMessage }}</span>
+          <ul>
+            <li v-for="val, key in errorMessage">{{ key }}: {{ val }}</li>
+          </ul>
         </div>
 
         <!-- Formulaire -->
@@ -25,7 +27,7 @@
               <span class="label-text font-medium">Adresse e-mail</span>
             </label>
             <input 
-              v-model="email" 
+              v-model="form.username" 
               type="email" 
               placeholder="lutin@noel.com" 
               class="input input-bordered w-full bg-base-100 focus:input-primary" 
@@ -39,7 +41,7 @@
               <a href="#" class="text-xs text-primary hover:underline">Oublié ?</a>
             </label>
             <input 
-              v-model="password" 
+              v-model="form.password" 
               type="password" 
               placeholder="••••••••" 
               class="input input-bordered w-full bg-base-100 focus:input-primary" 
@@ -50,7 +52,7 @@
           <button type="submit" class="btn btn-primary w-full mt-2" :disabled="isLoading">
             <span v-if="isLoading" class="loading loading-spinner"></span>
             <!-- Correction ici : v-else au lieu de v-else" -->
-            <span v-else>Se connecter 🎅</span>
+            <span v-else>Se connecter</span>
           </button>
         </form>
 
@@ -68,20 +70,44 @@
 </template>
 
 <script setup>
+import { authApi } from '~/src/services/auth' 
 
 definePageMeta({
   layout: 'auth'
 })
 
-const email = ref('')
-const password = ref('')
+const form = reactive({
+  username: '',
+  password: '',
+})
+
 const isLoading = ref(false)
-const errorMessage = ref('')
+const errorMessage = ref(null)
 
 async function handleLogin() {
+  errorMessage.value = null
   isLoading.value = true
-  errorMessage.value = ''
-  
-  // Logique d'authentification...
+
+  try {
+    await authApi.login(form)
+    
+    // 2. Connexion automatique
+    const loginResponse = await authApi.login({
+      username: form.username,
+      password: form.password
+    })
+
+    return navigateTo('/')
+  } catch (err) {
+    console.log(err.data?.detail)
+    let errors = {}
+    err.data?.detail?.forEach(element => {
+      errors[element.loc[1]] = element.msg
+    });
+    console.log(errors)
+    errorMessage.value = errors || 'Une erreur est survenue lors de l\'identification.'
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>

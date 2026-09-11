@@ -1,4 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+const host = process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000'
+const prefix = process.env.PREFIX || 'api'
+const version = process.env.VERSION || 'v1'
+
 export default defineNuxtConfig({
   app: {
     head: {
@@ -25,9 +30,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000',
-      prefix: process.env.PREFIX,
-      version: process.env.VERSION,
+      apiBase: `${host}/${prefix}/${version}`,
     }
   }
 })

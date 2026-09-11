@@ -1,99 +1,139 @@
 <template>
   <div>
-        <!-- Logo & En-tête -->
-        <div class="text-center space-y-2 mb-2">
-          <div class="w-12 h-12 rounded-full bg-secondary mx-auto flex items-center justify-center text-2xl shadow">
-            <img 
-                src="/logo-192.png" 
-                alt="Logo xmapp" 
-                class="w-8 h-8 object-contain drop-shadow-sm" 
-              />
-          </div>
-          <h1 class="text-2xl font-black text-secondary">Créer un compte</h1>
-          <p class="text-xs text-neutral/70">Rejoignez l'équipe des lutins organisateurs</p>
+    <!-- Logo & En-tête -->
+    <div class="text-center space-y-2 mb-2">
+      <div class="w-12 h-12 rounded-full bg-secondary mx-auto flex items-center justify-center text-2xl shadow">
+        <img 
+          src="/logo-192.png" 
+          alt="Logo xmapp" 
+          class="w-8 h-8 object-contain drop-shadow-sm" 
+        />
+      </div>
+      <h1 class="text-2xl font-black text-secondary">Créer un compte</h1>
+      <p class="text-xs text-neutral/70">Rejoignez l'équipe des lutins organisateurs</p>
+    </div>
+
+    <!-- Alerte d'erreur -->
+    <div v-if="errorMessage != []" class="alert alert-error text-xs py-2 mb-2">
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Formulaire -->
+    <form @submit.prevent="handleSignup" class="space-y-3">
+      <div class="grid grid-cols-2 gap-2">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-medium">Nom</span>
+          </label>
+          <input 
+            v-model="form.lastname" 
+            type="text" 
+            placeholder="de Myre" 
+            class="input input-bordered w-full bg-base-100 focus:input-secondary" 
+            required 
+          />
         </div>
 
-        <!-- Alerte d'erreur -->
-        <div v-if="errorMessage" class="alert alert-error text-xs py-2 mb-2">
-          <span>{{ errorMessage }}</span>
-        </div>
-
-        <!-- Formulaire -->
-        <form @submit.prevent="handleSignup" class="space-y-3">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium">Nom complet</span>
-            </label>
-            <input 
-              v-model="form.fullName" 
-              type="text" 
-              placeholder="Nicolas de Myre" 
-              class="input input-bordered w-full bg-base-100 focus:input-secondary" 
-              required 
-            />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium">Adresse e-mail</span>
-            </label>
-            <input 
-              v-model="form.email" 
-              type="email" 
-              placeholder="lutin@noel.com" 
-              class="input input-bordered w-full bg-base-100 focus:input-secondary" 
-              required 
-            />
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium">Mot de passe</span>
-            </label>
-            <input 
-              v-model="form.password" 
-              type="password" 
-              placeholder="••••••••" 
-              class="input input-bordered w-full bg-base-100 focus:input-secondary" 
-              required 
-            />
-          </div>
-
-          <button type="submit" class="btn btn-secondary w-full mt-4" :disabled="isLoading">
-            <span v-if="isLoading" class="loading loading-spinner"></span>
-            <span v-else>S'inscrire</span>
-          </button>
-        </form>
-
-        <div class="divider my-3 text-xs text-neutral/50">OU</div>
-
-        <!-- Lien Connexion -->
-        <div class="text-center text-sm">
-          <span class="text-neutral/70">Vous avez déjà un compte ? </span>
-          <NuxtLink to="/auth/login" class="text-primary font-bold hover:underline">
-            Se connecter
-          </NuxtLink>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-medium">Prénom</span>
+          </label>
+          <input 
+            v-model="form.firstname" 
+            type="text" 
+            placeholder="Nicolas" 
+            class="input input-bordered w-full bg-base-100 focus:input-secondary" 
+            required 
+          />
         </div>
       </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium">Adresse e-mail</span>
+        </label>
+        <input 
+          v-model="form.email" 
+          type="email" 
+          placeholder="lutin@noel.com" 
+          class="input input-bordered w-full bg-base-100 focus:input-secondary" 
+          required 
+        />
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium">Mot de passe</span>
+        </label>
+        <input 
+          v-model="form.password" 
+          type="password" 
+          placeholder="••••••••" 
+          class="input input-bordered w-full bg-base-100 focus:input-secondary" 
+          required 
+        />
+      </div>
+
+      <button type="submit" class="btn btn-secondary w-full mt-4" :disabled="isLoading">
+        <span v-if="isLoading" class="loading loading-spinner"></span>
+        <span v-else>S'inscrire</span>
+      </button>
+    </form>
+
+    <div class="divider my-3 text-xs text-neutral/50">OU</div>
+
+    <!-- Lien Connexion -->
+    <div class="text-center text-sm">
+      <span class="text-neutral/70">Vous avez déjà un compte ? </span>
+      <NuxtLink to="/auth/login" class="text-primary font-bold hover:underline">
+        Se connecter
+      </NuxtLink>
+    </div>
+  </div>
 </template>
 
 <script setup>
+import { authApi } from '~/src/services/auth' 
 
 definePageMeta({
   layout: 'auth'
 })
 
 const form = reactive({
-  fullName: '',
+  firstname: '',
+  lastname: '',
   email: '',
   password: '',
-  confirmPassword: ''
 })
 
 const isLoading = ref(false)
-const errorMessage = ref('')
+const errorMessage = ref([])
 
-function handleSignup() {
-  console.log('hihi')
+async function handleSignup() {
+  errorMessage.value = []
+  isLoading.value = true
+
+  try {
+    await authApi.signup(form)
+    
+    // 2. Connexion automatique
+    const loginResponse = await authApi.login({
+      username: form.email,
+      password: form.password
+    })
+
+    // 3. Sauvegarde des tokens et redirection
+    const accessToken = useCookie('access_token', { maxAge: 60 * 60 * 24 * 7 })
+    const refreshToken = useCookie('refresh_token', { maxAge: 60 * 60 * 24 * 30 })
+
+    accessToken.value = loginResponse.access_token
+    refreshToken.value = loginResponse.refresh_token
+
+    return navigateTo('/')
+  } catch (err) {
+    errorMessage.value = err.data?.detail.reduce((acc, curr) => { return curr.msg}, []) || 'Une erreur est survenue lors de l\'inscription.'
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
