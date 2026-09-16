@@ -47,8 +47,8 @@
 
     <!-- CARTE PROFIL CLIQUABLE -->
       
-    <div class="p-3 bg-base-300/50 rounded-box text-xs text-center mt-6 md:mt-0 space-y-1">
-      <div class="my-2 flex items-center justify-between gap-1 p-2 rounded-xl bg-base-100 border border-base-300/60 shadow-sm">
+   
+      <div class="my-2 flex items-center justify-between gap-1 p-2 rounded-xl bg-base-100 border border-base-300/60 shadow-lg">
   
 
       <NuxtLink 
@@ -56,25 +56,22 @@
         @click="emit('close')"
         class="flex items-center gap-3 flex-1 min-w-0 p-1 rounded-lg hover:bg-base-200/60 transition-all cursor-pointer select-none group"
       >
-        <!-- Avatar (Initiales ou Image) -->
         <div class="avatar placeholder">
-          <div class="bg-primary text-primary-content rounded-full w-9 ring ring-primary ring-offset-base-100 ring-offset-1">
-            <span class="text-xs font-bold">JD</span>
+          <div class="bg-primary text-primary-content rounded-full w-9 ">
+            <span class="text-xs font-bold">{{ initials }}</span>
           </div>
         </div>
 
-        <!-- Nom & Lien -->
         <div class="flex-1 min-w-0">
           <p class="text-sm font-semibold truncate group-hover:text-primary transition-colors">
-            John Doe
+            {{ user ? `${user.person?.first_name} ${user.person?.last_name}` : 'Chargement...' }}
           </p>
           <p class="text-[11px] text-neutral/60 truncate">
-            Mon profil
+            {{ user?.email || 'Mon profil' }}
           </p>
         </div>
       </NuxtLink>
 
-      <!-- Bouton de déconnexion -->
       <button 
         type="button" 
         @click="handleLogout"
@@ -87,25 +84,15 @@
           <line x1="21" y1="12" x2="9" y2="12" />
         </svg>
       </button>
-    </div>
       
-      <div class="flex items-center justify-between">
-        <span>Statut API :</span>
-        <span v-if="loading" class="badge badge-warning badge-sm">Connexion...</span>
-        <span v-else-if="status !== 'offline'" class="badge badge-success badge-sm font-semibold">
-          {{ status }}
-        </span>
-        <span v-else class="badge badge-error badge-sm text-white">Hors ligne</span>
-      </div>
-      <p v-if="message" class="text-[10px] text-neutral/70 truncate">
-        {{ message }}
-      </p>
+      
     </div>
   </aside>
 </template>
 
 <script setup>
 import authApi from '~/src/services/auth'
+const { user, initials, logout } = useAuth()
 
 const props = defineProps({
   isMobileMenuOpen: {
@@ -113,25 +100,13 @@ const props = defineProps({
     required: true,
     default: false,
   },
-  message: {
-    type: String,
-    default: ''
-  },
-  status: {
-    type: String,
-    default: 'Inconnu'
-  },
-  loading: {
-    type: Boolean,
-    default: true
-  }
 })
 
 const emit = defineEmits(['close'])
 
+
 const handleLogout = () => {
   emit('close')
-  authApi.clearTokens()
-  navigateTo('/auth/login')
+  logout()
 }
 </script>

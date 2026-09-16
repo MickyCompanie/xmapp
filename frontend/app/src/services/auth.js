@@ -32,7 +32,7 @@ const authApi = {
     refreshToken.value = null
   },
 
-  signup: (data) => apiFetch('/user/signup', {
+  signup: async (data) => await apiFetch('/user/signup', {
     method: 'POST',
     body: {
       first_name: data.firstname,
@@ -57,7 +57,10 @@ const authApi = {
     }
 
     return response
-  }
+  },
+
+  getUser: async () =>  await apiFetch('/user/me')
+  
 }
 
 export { authApi }
