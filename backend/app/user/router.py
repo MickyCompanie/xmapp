@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from app.db import get_db
 from app.user.model import User, UserRole
-from app.user.schemas import UserRead, UserCreate, UserUpdate, UserDelete
+from app.user.schemas import UserRead, UserFullRead, UserCreate, UserUpdate, UserDelete
 from app.user import services as user_service
 from app.auth.depedencies import must_be_authenticated, get_current_user, authorized_role
 
@@ -13,7 +13,7 @@ user_router = APIRouter()
 def signup(user_in: UserCreate, db: Session = Depends(get_db)):
     return user_service.signup(db=db, user_in=user_in)
 
-@user_router.get("/me", response_model=UserRead, status_code=status.HTTP_200_OK)
+@user_router.get("/me", response_model=UserFullRead, status_code=status.HTTP_200_OK)
 def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
 
