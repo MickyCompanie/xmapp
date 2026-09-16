@@ -29,7 +29,7 @@
 
       <!-- Menu Navigation -->
       <ul class="menu bg-base-100 rounded-box p-2 gap-1 shadow-sm">
-        <li v-for="item in NAV_ITEMS" :key="item.to" >
+        <li v-for="item in visibleNavItems" :key="item.to" >
           <NuxtLink
             :to="item.to"
             @click="emit('close')"
@@ -103,6 +103,14 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
+
+const visibleNavItems = computed(() => {
+  return NAV_ITEMS.filter(item => {
+    if (!item.condition) return true
+    
+    return item.condition(user.value)
+  })
+})
 
 
 const handleLogout = () => {
