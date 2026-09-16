@@ -24,10 +24,13 @@
     <main class="flex-1 p-4 sm:p-6 space-y-6 overflow-y-auto w-full">
       <slot />
     </main>
+
+    <Toast />
   </div>
 </template>
 
 <script setup>
+
 const { fetchUser } = useAuth()
 
 await useAsyncData('user-profile', () => fetchUser())
