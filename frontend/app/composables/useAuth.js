@@ -1,6 +1,6 @@
 // composables/useAuth.js
 import { authApi } from '~/src/services/auth'
-import { apiFetch } from '~/src/services/api'
+import { personApi } from '~/src/services/person'
 
 export const useAuth = () => {
   // État réactif global conservé entre les pages
@@ -43,11 +43,22 @@ export const useAuth = () => {
     return `${last}${first}`.toUpperCase() || 'U'
   })
 
+  const updateProfile = async (form) => {
+    isLoading.value = true
+    try { 
+        await personApi.updatePerson(form, user.value.person.id)
+        return await fetchUser()
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     user,
     isLoading,
     initials,
     fetchUser,
+    updateProfile,
     logout
   }
 }

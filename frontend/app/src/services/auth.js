@@ -59,7 +59,8 @@ const authApi = {
     return response
   },
 
-  getUser: async () =>  await apiFetch('/user/me')
+  getUser: async () =>  await apiFetch('/user/me'),
+  
   
 }
 
