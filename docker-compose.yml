@@ -28,7 +28,7 @@ services:
     env_file:
       - .env
     container_name: xmapp_backend
-    command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload --reload-dir app
     ports:
       - "8000:8000"
     volumes:
@@ -40,7 +40,7 @@ services:
       - db
       - db_test
 
-  frontend:  # <-- Doit être aligné avec backend, db et db_test
+  frontend:  
     build: ./frontend
     env_file:
       - .env
