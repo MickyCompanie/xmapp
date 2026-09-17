@@ -22,5 +22,5 @@ class Wish(Base):
     owner: Mapped["Person"] = relationship(back_populates="wishes", init=False)
     
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True, default=None)
-    url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True, default=None)
+    url: Mapped[Optional[str]] = mapped_column(Text, nullable=True, default=None)
     price_estimate: Mapped[Optional[float]] = mapped_column(Float, nullable=True, default=None)
