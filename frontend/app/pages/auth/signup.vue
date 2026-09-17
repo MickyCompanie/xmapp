@@ -25,25 +25,24 @@
       <div class="grid grid-cols-2 gap-2">
         <div class="form-control">
           <label class="label">
-            <span class="label-text font-medium">Nom</span>
-          </label>
-          <input 
-            v-model="form.lastname" 
-            type="text" 
-            placeholder="de Myre" 
-            class="input input-bordered w-full bg-base-100 focus:input-secondary" 
-            required 
-          />
-        </div>
-
-        <div class="form-control">
-          <label class="label">
             <span class="label-text font-medium">Prénom</span>
           </label>
           <input 
             v-model="form.firstname" 
             type="text" 
             placeholder="Nicolas" 
+            class="input input-bordered w-full bg-base-100 focus:input-secondary" 
+            required 
+          />
+        </div>
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-medium">Nom</span>
+          </label>
+          <input 
+            v-model="form.lastname" 
+            type="text" 
+            placeholder="de Myre" 
             class="input input-bordered w-full bg-base-100 focus:input-secondary" 
             required 
           />
@@ -76,7 +75,7 @@
         />
       </div>
 
-      <button type="submit" class="btn btn-secondary w-full mt-4" :disabled="isLoading">
+      <button type="submit" class="btn btn-secondary w-full" :disabled="isLoading">
         <span v-if="isLoading" class="loading loading-spinner"></span>
         <span v-else>S'inscrire</span>
       </button>

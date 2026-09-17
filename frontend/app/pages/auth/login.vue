@@ -35,10 +35,9 @@
             />
           </div>
 
-          <div class="form-control">
+          <div class="form-control flex flex-col">
             <label class="label flex justify-between">
               <span class="label-text font-medium">Mot de passe</span>
-              <a href="#" class="text-xs text-primary hover:underline">Oublié ?</a>
             </label>
             <input 
               v-model="form.password" 
@@ -47,6 +46,7 @@
               class="input input-bordered w-full bg-base-100 focus:input-primary" 
               required 
             />
+              <a href="#" class="text-xs self-end mt-4 text-primary hover:underline">Oublié ?</a>
           </div>
 
           <button type="submit" class="btn btn-primary w-full mt-2" :disabled="isLoading">
