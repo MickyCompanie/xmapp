@@ -2,16 +2,22 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from app.db import get_db
 from app.wish.model import Wish
-from app.wish.schemas import WishRead, WishCreate, WishUpdate
+from app.wish.schemas import WishRead, WishCreate, WishUpdate, WishesTable
 from app.wish import services as wish_service
 from app.user.model import User
 from app.auth.depedencies import must_be_authenticated, get_current_user
 
 wish_router = APIRouter()
 
-@wish_router.get('/', dependencies=[Depends(must_be_authenticated)], response_model=list[WishRead], status_code=status.HTTP_200_OK)
+@wish_router.get('/', dependencies=[Depends(must_be_authenticated)], response_model=WishesTable, status_code=status.HTTP_200_OK)
 def get_all_wishes(db: Session = Depends(get_db)):
-    return wish_service.get_all_wishes(db)
+    wishes = wish_service.get_all_wishes(db)
+
+    return {
+        "tableHeads": ["titre", "création", "prix estimé", "", ""],
+        "attributes": ["title", "created_at", "price_estimate"],
+        "wishes": wishes
+    }
 
 @wish_router.get('/{wish_id}', dependencies=[Depends(must_be_authenticated)], response_model=WishRead, status_code=status.HTTP_200_OK)
 def get_wish_by_id(wish_id: int, db: Session = Depends(get_db)):

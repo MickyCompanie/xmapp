@@ -3,6 +3,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from typing import Optional
 from datetime import datetime
 
+
 class WishCreate(BaseModel):
     title: str
     description: str | None = None
@@ -25,5 +26,11 @@ class WishRead(BaseModel):
     price_estimate: float
     created_at: datetime
     updated_at: datetime
+    person_id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+class WishesTable(BaseModel):
+    tableHeads: list[str]
+    attributes: list[str]
+    wishes: list[WishRead]
