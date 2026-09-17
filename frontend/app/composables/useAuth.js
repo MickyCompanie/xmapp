@@ -40,7 +40,7 @@ export const useAuth = () => {
     if (!user.value) return '?'
     const first = user.value.person?.first_name?.[0] || ''
     const last = user.value.person?.last_name?.[0] || ''
-    return `${last}${first}`.toUpperCase() || 'U'
+    return `${first}${last}`.toUpperCase() || 'U'
   })
 
   const updateProfile = async (form) => {
