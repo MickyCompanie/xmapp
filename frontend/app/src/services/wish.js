@@ -2,21 +2,15 @@ import { apiFetch } from './api'
 
 
 const wishApi = {
-    getWishes: () => apiFetch('/wish'),
+    getWishes: async () => await apiFetch('/wish'),
 
-    getWishById: (id) => apiFetch(`/wish/${id}`),
+    getWishById: async (id) => await apiFetch(`/wish/${id}`),
 
-    createWish: (body) => apiFetch('/wish/', {
-        method: 'POST',
-        body: body
-    }),
+    createWish: async (body) => await apiFetch('/wish/', { method: 'POST', body: body}),
 
-    updateWish: (body, id) => apiFetch(`/wish/${id}`, {
-        method: 'PUT',
-        body: body
-    }),
+    updateWish: async (body, id) => await apiFetch(`/wish/${id}`, { method: 'PUT', body: body}),
 
-    deleteWish: (id) => apiFetch(`/wish/${id}`, {method: 'DELETE'})
+    deleteWish: async (id) => await apiFetch(`/wish/${id}`, {method: 'DELETE'})
 }
 
 export { wishApi }
