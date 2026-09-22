@@ -13,14 +13,12 @@
           <p class="text-xs text-neutral/70">Accédez à votre espace de gestion des fêtes</p>
         </div>
 
-        <!-- Alerte d'erreur -->
         <div v-if="errorMessage" class="alert alert-error text-xs py-2 mb-2">
           <ul>
             <li v-for="val, key in errorMessage">{{ key }}: {{ val }}</li>
           </ul>
         </div>
 
-        <!-- Formulaire -->
         <form @submit.prevent="handleLogin" class="space-y-4">
           <div class="form-control">
             <label class="label">
@@ -51,14 +49,12 @@
 
           <button type="submit" class="btn btn-primary w-full mt-2" :disabled="isLoading">
             <span v-if="isLoading" class="loading loading-spinner"></span>
-            <!-- Correction ici : v-else au lieu de v-else" -->
             <span v-else>Se connecter</span>
           </button>
         </form>
 
         <div class="divider my-4 text-xs text-neutral/50">OU</div>
 
-        <!-- Lien Inscription -->
         <div class="text-center text-sm">
           <span class="text-neutral/70">Vous n'avez pas de compte ? </span>
           <NuxtLink to="/auth/signup" class="text-secondary font-bold hover:underline">
@@ -70,7 +66,7 @@
 </template>
 
 <script setup>
-import { authApi } from '~/src/services/auth' 
+const { login } = useAuth()
 import { formatApiError } from '~/utils/error'
 
 definePageMeta({
@@ -90,7 +86,7 @@ async function handleLogin() {
   isLoading.value = true
 
   try {
-    await authApi.login({
+    await login({
       username: form.username,
       password: form.password
     })

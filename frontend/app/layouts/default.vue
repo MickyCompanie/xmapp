@@ -33,7 +33,6 @@
 
 const { fetchUser } = useAuth()
 
-await useAsyncData('user-profile', () => fetchUser())
 
 const isMobileMenuOpen = ref(false)
 

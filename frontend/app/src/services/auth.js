@@ -1,37 +1,6 @@
 import { apiFetch } from './api'
 
-
 const authApi = {
-
-  setTokens: (tokens) => {
-    const config = useRuntimeConfig()
-    const accessTokenMaxAge = config.public.accessTokenExpiryMin * 60
-    const refreshTokenMaxAge = config.public.refreshTokenExpiryDays * 24 * 60 * 60
-
-    const accessToken = useCookie('access_token', {
-      maxAge: accessTokenMaxAge,
-      sameSite: 'lax',
-      path: '/'
-    })
-
-    const refreshToken = useCookie('refresh_token', {
-      maxAge: refreshTokenMaxAge,
-      sameSite: 'lax',
-      path: '/'
-    })
-
-    accessToken.value = tokens.access_token
-    refreshToken.value = tokens.refresh_token
-  },
-
-  
-  clearTokens: () => {
-    const accessToken = useCookie('access_token')
-    const refreshToken = useCookie('refresh_token')
-    accessToken.value = null
-    refreshToken.value = null
-  },
-
   signup: async (data) => await apiFetch('/user/signup', {
     method: 'POST',
     body: {
@@ -47,21 +16,19 @@ const authApi = {
     body.append('username', credentials.username || credentials.email)
     body.append('password', credentials.password)
 
-    const response = await apiFetch('/auth/login', {
+    return await apiFetch('/auth/login', {
       method: 'POST',
       body
     })
-
-    if (response?.access_token) {
-      authApi.setTokens(response)
-    }
-
-    return response
   },
 
-  getUser: async () =>  await apiFetch('/user/me'),
-  
-  
+  getUser: async (tokenOverride = null) => {
+    const options = {}
+    if (tokenOverride) {
+      options.headers = { Authorization: `Bearer ${tokenOverride}` }
+    }
+    return await apiFetch('/user/me', options)
+  }
 }
 
 export { authApi }

@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
-const host = process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8000'
+const host = process.env.NUXT_PUBLIC_API_BASE || 'http://127.0.0.1:8000'
 const prefix = process.env.PREFIX || 'api'
 const version = process.env.VERSION || 'v1'
 

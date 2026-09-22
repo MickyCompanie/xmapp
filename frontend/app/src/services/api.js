@@ -1,12 +1,14 @@
 // src/services/api.js
-import { authApi } from './auth'
 
 export const apiFetch = async (endpoint, options = {}) => {
   const accessToken = useCookie('access_token')
   const refreshToken = useCookie('refresh_token')
   const config = useRuntimeConfig()
 
-  const headers = { ...options?.headers }
+  const headers = {
+    ...options?.headers
+  }
+
   if (accessToken.value) {
     headers.Authorization = `Bearer ${accessToken.value}`
   }
@@ -18,8 +20,9 @@ export const apiFetch = async (endpoint, options = {}) => {
       headers
     })
   } catch (error) {
-    // Access Token expired
-    if (error?.status === 401 && refreshToken.value && endpoint !== '/auth/refresh') {
+    const isUnauthorized = error?.status === 401 || error?.response?.status === 401
+
+    if (isUnauthorized && refreshToken.value && endpoint !== '/auth/refresh') {
       try {
         const refreshResponse = await $fetch('/auth/refresh', {
           baseURL: config.public.apiBase,
@@ -27,21 +30,30 @@ export const apiFetch = async (endpoint, options = {}) => {
           body: { refresh_token: refreshToken.value }
         })
 
-        authApi.setTokens(refreshResponse)
+        if (refreshResponse?.access_token) {
+          accessToken.value = refreshResponse.access_token
+          if (refreshResponse?.refresh_token) {
+            refreshToken.value = refreshResponse.refresh_token
+          }
 
-        headers.Authorization = `Bearer ${refreshResponse.access_token}`
-        return await $fetch(endpoint, {
-          baseURL: config.public.apiBase,
-          ...options,
-          headers
-        })
+          headers.Authorization = `Bearer ${refreshResponse.access_token}`
+          return await $fetch(endpoint, {
+            baseURL: config.public.apiBase,
+            ...options,
+            headers
+          })
+        }
       } catch (refreshError) {
-        // Refresh token expired
-        authApi.clearTokens()
-        navigateTo('/auth/login')
+        accessToken.value = null
+        refreshToken.value = null
+
+        if (import.meta.client) {
+          navigateTo('/auth/login')
+        }
         throw refreshError
       }
     }
+
     throw error
   }
 }
