@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 
 def test_login_success(client, test_user):
     login_data = {
-        "username": test_user.email, # FastAPI OAuth2 utilise 'username' pour l'identifiant (email)
+        "username": test_user.email, 
         "password": "password123"
     }
     
@@ -75,7 +75,7 @@ def test_refresh_token_expired(client, test_user):
     """Vérifie le rejet d'un token dont la date d'expiration est dépassée."""
     expired_payload = {
         "sub": test_user.email,
-        "exp": datetime.now(timezone.utc) - timedelta(minutes=10) # Expiré depuis 10 min
+        "exp": datetime.now(timezone.utc) - timedelta(minutes=10) 
     }
     expired_token = jwt.encode(
         expired_payload,
