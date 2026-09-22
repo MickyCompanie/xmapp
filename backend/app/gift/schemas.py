@@ -5,9 +5,9 @@ from app.gift.model import GiftStatus
 
 class GiftCreate(BaseModel):
     title: str = Field(..., min_length=1, max_length=100, examples=["Playstation"])
-    price_paid: Optional[float] 
+    price_paid: Optional[float] = None
     receiver_id: int 
-    status: GiftStatus 
+    status: GiftStatus = GiftStatus.PENDING
 
 class GiftUpdate(BaseModel):
     id: int

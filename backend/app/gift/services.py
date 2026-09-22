@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
-from app.gift.model import Gift
+from app.gift.model import Gift, GiftStatus
 from app.gift.schemas import GiftCreate, GiftUpdate, GiftRead
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from app.user.model import User, UserRole
+from app.wish.model import Wish
 
 def get_all_gifts(db: Session, user: User) -> list[GiftRead]:
     if user.role == UserRole.SANTA:
@@ -29,13 +30,27 @@ def create_gift(db: Session, gift_in: GiftCreate, person_id: int) -> GiftRead:
 
     return new_gift
 
-def create_gift_from_wish(db: Session, gift_in: GiftCreate, wish_id: int, person_id: int) -> GiftRead:
-    gift_data = gift_in.model_dump()
+def create_gift_from_wish(db: Session, wish_id: int, person_id: int) -> Gift:
+    wish = db.query(Wish).filter(Wish.id == wish_id).first()
+    if not wish:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Souhait introuvable."
+        )
+
+    if wish.person_id == person_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Vous ne pouvez pas créer un cadeau depuis votre propre liste de souhaits."
+        )
 
     new_gift = Gift(
-        **gift_data, 
+        title=wish.title,
+        price_paid=wish.price_estimate,
         giver_id=person_id,
-        wish_id=wish_id
+        receiver_id=wish.person_id,
+        wish_id=wish.id,
+        status=GiftStatus.PENDING
     )
 
     db.add(new_gift)

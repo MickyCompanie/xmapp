@@ -29,8 +29,8 @@ def create_gift(gift_in: GiftCreate, user: User = Depends(get_current_user), db:
     return gift_service.create_gift(db, gift_in, user.person_id)
 
 @gift_router.post('/{wish_id}', response_model=GiftRead, status_code=status.HTTP_201_CREATED)
-def create_gift_from_wish(gift_in: GiftCreate, wish_id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return gift_service.create_gift_from_wish(db, gift_in, wish_id, user.person_id)
+def create_gift_from_wish(wish_id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return gift_service.create_gift_from_wish(db, wish_id, user.person_id)
 
 @gift_router.put('/{gift_id}', dependencies=[Depends(must_be_authenticated)], response_model=GiftRead, status_code=status.HTTP_200_OK)
 def update_gift(gift_id: int, gift_in: GiftUpdate, db: Session = Depends(get_db)):

@@ -1,4 +1,5 @@
 from app.config import Config
+from app.wish.model import Wish
 
 
 VALID_GIFT_PAYLOAD = {
@@ -10,7 +11,6 @@ VALID_GIFT_PAYLOAD = {
 }
 
 # GET
-
 
 def test_santa_user_can_get_all_gifts(santa_client, test_gift):
     """Un utilisateur SANTA doit pouvoir récupérer la liste complète des cadeaux."""
@@ -85,13 +85,12 @@ def test_get_gift_by_id_not_found(auth_client):
 
     assert response.status_code == 404
 
-
 # POST
-
 
 def test_auth_user_can_create_spontaneous_gift(
     auth_client, test_person_without_account
 ):
+    """Création d'un cadeau spontané (sans souhait associé) avec un payload JSON."""
     payload = {
         **VALID_GIFT_PAYLOAD,
         "receiver_id": test_person_without_account.id,
@@ -108,24 +107,61 @@ def test_auth_user_can_create_spontaneous_gift(
 
 
 def test_auth_user_can_create_gift_from_wish(
-    auth_client, test_wish, test_person_without_account
+    auth_client, test_person_without_account, db_session
 ):
-    payload = {
-        **VALID_GIFT_PAYLOAD,
-        "receiver_id": test_person_without_account.id,
-    }
+    """Création d'un cadeau à partir du souhait d'une AUTRE personne."""
+    other_wish = Wish(
+        title="Console de jeux",
+        price_estimate=29.99,
+        person_id=test_person_without_account.id,
+    )
+    db_session.add(other_wish)
+    db_session.commit()
 
     response = auth_client.post(
-        f"/{Config.PREFIX}{Config.VERSION}/gift/{test_wish.id}", json=payload
+        f"/{Config.PREFIX}{Config.VERSION}/gift/{other_wish.id}"
     )
 
     assert response.status_code == 201
     data = response.json()
-    assert data["wish_id"] == test_wish.id
+    assert data["wish_id"] == other_wish.id
+    assert data["title"] == other_wish.title
+    assert data["price_paid"] == other_wish.price_estimate
     assert data["receiver_id"] == test_person_without_account.id
 
 
+def test_user_cannot_create_gift_from_own_wish(
+    auth_client, test_user, db_session
+):
+    """Un utilisateur ne doit pas pouvoir créer un cadeau depuis son propre souhait."""
+    own_wish = Wish(
+        title="Mon propre souhait",
+        price_estimate=20.0,
+        person_id=test_user.person_id,
+    )
+    db_session.add(own_wish)
+    db_session.commit()
+
+    response = auth_client.post(
+        f"/{Config.PREFIX}{Config.VERSION}/gift/{own_wish.id}"
+    )
+
+    assert response.status_code == 400
+    assert "propre liste" in response.json().get("detail", "")
+
+
+def test_create_gift_from_wish_not_found(auth_client):
+    """Tentative de création de cadeau depuis un souhait inexistant."""
+    invalid_wish_id = 999999
+    response = auth_client.post(
+        f"/{Config.PREFIX}{Config.VERSION}/gift/{invalid_wish_id}"
+    )
+
+    assert response.status_code == 404
+
+
 def test_non_auth_user_cannot_create_gift(client, test_person_without_account):
+    """Un utilisateur anonyme ne peut pas créer un cadeau spontané."""
     payload = {
         **VALID_GIFT_PAYLOAD,
         "receiver_id": test_person_without_account.id,
@@ -138,8 +174,15 @@ def test_non_auth_user_cannot_create_gift(client, test_person_without_account):
     assert response.status_code == 401
 
 
-# PUT
+def test_non_auth_user_cannot_create_gift_from_wish(client, test_wish):
+    """Un utilisateur anonyme ne peut pas créer un cadeau depuis un souhait."""
+    response = client.post(
+        f"/{Config.PREFIX}{Config.VERSION}/gift/{test_wish.id}"
+    )
 
+    assert response.status_code == 401
+
+# PUT
 
 def test_auth_user_can_update_gift(auth_client, test_gift):
     payload = {
@@ -192,9 +235,7 @@ def test_update_gift_id_mismatch(auth_client, test_gift):
 
     assert response.status_code in [400, 404]
 
-
 # DELETE
-
 
 def test_auth_user_can_delete_gift(auth_client, test_gift):
     """Un utilisateur connecté doit pouvoir supprimer son cadeau."""
