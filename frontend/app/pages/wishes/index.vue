@@ -95,11 +95,6 @@
         <div class="stat-value text-secondary text-2xl">{{ selectedWish.price_estimate }} €</div>
       </div>
 
-      <div class="text-xs text-base-content/50 pt-2 border-t border-base-content/10 flex justify-between">
-        <span>Créé le {{ formatDate(selectedWish.created_at) }}</span>
-        <span v-if="selectedWish.updated_at">Mis à jour le {{ formatDate(selectedWish.updated_at) }}</span>
-      </div>
-
       <div v-if="canCreateGift(selectedWish.person_id)" class="modal-action flex flex-col justify-between items-center">
           <button 
             @click="handleCreateGift(selectedWish)" 
@@ -108,6 +103,12 @@
             🎁 Créer un cadeau
           </button>
       </div>
+
+      <div class="text-xs text-base-content/50 pt-2 border-t border-base-content/10 flex justify-between">
+        <span>Créé le {{ formatDate(selectedWish.created_at) }}</span>
+        <span v-if="selectedWish.updated_at">Mis à jour le {{ formatDate(selectedWish.updated_at) }}</span>
+      </div>
+
     </div>
   </Modal>
 
@@ -148,6 +149,7 @@
 
 <script setup>
 const { wishesTable, isLoading, fetchAllWishes, createWish, updateWish, deleteWishById } = useWish()
+const { createGiftFromWishId } = useGift()
 const { user } = useAuth()
 const { success, error } = useToast()
 
@@ -235,13 +237,14 @@ const handleDelete = async (id) => {
 }
 
 const handleCreateGift = async (wish) => {
-    console.log('cadeau!')
-  //try {
-    // await createGiftFromWish(wish.id)
-    //success(`Cadeau "${wish.title}" créé!`)
-    //isViewModalOpen.value = false
-  //} catch (err) {
-    //error('Impossible de créer le cadeau.')
-  //}
+  try {
+    await createGiftFromWishId(wish.id)
+    success(`Cadeau "${wish.title}" créé!`)
+    isViewModalOpen.value = false
+    return navigateTo('/gifts')
+  } catch (err) {
+    isViewModalOpen.value = false
+    error('Impossible de créer le cadeau.')
+  }
 }
 </script>
