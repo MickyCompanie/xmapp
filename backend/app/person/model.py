@@ -42,3 +42,7 @@ class Person(Base):
         back_populates="receiver", 
         default_factory=list
     )
+
+    @property
+    def fullname(self) -> str:
+        return f"{self.first_name} {self.last_name}".strip()

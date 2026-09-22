@@ -32,6 +32,17 @@ class PersonRead(PersonBase):
 
 
 class PersonDetail(PersonRead):
-#    wishes: List["WishRead"] = [] 
+#    wishes: List["WishRead"] = []
+    id: int
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    birth_date: Optional[datetime] = None
+    managed_by_id: Optional[int] = None 
     
+    model_config = ConfigDict(from_attributes=True)
+
+class PersonSelect(BaseModel):
+    id: int
+    fullname: str
+
     model_config = ConfigDict(from_attributes=True)
