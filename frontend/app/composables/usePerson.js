@@ -20,7 +20,6 @@ export const usePerson = () => {
   }
 
   const fetchAllPersonSelect = async (forceRefresh = false) => {
-    console.log('coucou')
     if (personsSelect.value !== null && !forceRefresh) {
       return personsSelect.value
     }
