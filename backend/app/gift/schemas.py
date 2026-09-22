@@ -27,3 +27,8 @@ class GiftRead(BaseModel):
     updated_at: datetime
     
     model_config = ConfigDict(from_attributes=True)
+
+class GiftTable(BaseModel):
+    tableHeads: list[str]
+    attributes: list[str]
+    gifts: list[GiftRead]
