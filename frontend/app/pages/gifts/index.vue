@@ -256,7 +256,6 @@ await useAsyncData('gift-page-data', async () => {
 })
 
 const openViewModal = (giftItem) => {
-  console.log(giftItem)
   selectedGift.value = giftItem
   isViewModalOpen.value = true
 }
